@@ -17,8 +17,6 @@ class UpdateUserService {
     }
 
     public execute({ id, CPF, birthday, name, phone_number }: RequestDTO) {
-        if (!this.usersRepository.getById(id))
-            throw Error("There is no user with this id");
         if (
             !(
                 !!CPF &&

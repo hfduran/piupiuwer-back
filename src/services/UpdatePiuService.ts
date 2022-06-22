@@ -13,8 +13,6 @@ class UpdatePiuService {
     }
 
     public execute({ id, text }: RequestDTO) {
-        if (!this.piusRepository.getById(id))
-            throw Error("There is no piu with this id");
         if (!text) throw Error("text is empty");
         if (text.length > 140)
             throw Error("text exceeds the 140 characters limit");

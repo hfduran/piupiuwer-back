@@ -16,7 +16,7 @@ usersRouter.delete("/:id", (request, response) => {
 
         const deleteUser = new DeleteUserService(usersRepository);
         deleteUser.execute(id);
-        return;
+        return response.json({ message: "user deleted" });
     } catch (err: any) {
         return response.status(400).json({ error: err.message });
     }

@@ -55,6 +55,7 @@ class UsersRepository {
     }
 
     public update({ id, CPF, birthday, name, phone_number }: UpdateUserDTO) {
+        if (!this.getById(id)) throw Error("There is no user with this id");
         const index = this.getIndexById(id);
         this.users[index] = {
             id,
@@ -70,7 +71,7 @@ class UsersRepository {
 
     public delete(id: string) {
         if (!this.getById(id)) throw Error("There is no user with this id");
-        
+
         const index = this.getIndexById(id);
         this.users.splice(index, 1);
         return;

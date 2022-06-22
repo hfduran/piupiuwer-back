@@ -51,6 +51,8 @@ class PiusRepository {
     }
 
     public update({ id, text }: UpdatePiuDTO): Piu {
+        if (!this.getById(id)) throw Error("There is no piu with this id");
+
         const index = this.getIndexById(id);
         const piu = this.pius[index];
         piu.text = text;
