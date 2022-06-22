@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { response, Router } from "express";
 import { parseISO } from "date-fns";
 
 import CreateUserService from "../services/CreateUserService";
@@ -13,25 +13,23 @@ interface RequestDTO {
     id: string;
 }
 
-usersRouter.get("/", (request, response) => {
+usersRouter.get("/:id", (request, response) => {
     try {
-        const data = request.query;
+        const { id } = request.params;
 
         const getUser = new GetUserService(usersRepository);
+
+        return response.json({ user: getUser.execute(id) });
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
+
+usersRouter.get("/", (request, response) => {
+    try {
         const getAllUsers = new GetAllUsersService(usersRepository);
 
-        /* 
-           Provavelmente nao é assim que faz... mas funcionou
-           basicamente ele checa se foi enviado um querry id.
-           Se foi, retorna o usuário com o id.
-           Se não, retorna tudo.
-        */
-
-        if (typeof data.id === "string") {
-            return response.json({ user: getUser.execute(data.id) });
-        } else {
-            return response.json({ users: getAllUsers.execute() });
-        }
+        return response.json({ users: getAllUsers.execute() });
     } catch (err: any) {
         return response.status(400).json({ error: err.message });
     }
