@@ -1,12 +1,26 @@
-import { Router } from "express";
+import { response, Router } from "express";
 import { parseISO } from "date-fns";
 
 import PostPiuService from "../services/PostPiuService";
 import GetPiuService from "../services/GetPiuService";
 import GetAllPiusService from "../services/GetAllPiusService";
+import UpdatePiuService from "../services/UpdatePiuService";
 import { piusRepository, usersRepository } from ".";
 
 const piusRouter = Router();
+
+piusRouter.patch("/", (request, response) => {
+    try {
+        const { id, text } = request.body;
+
+        const updatePiu = new UpdatePiuService(piusRepository);
+        const piu = updatePiu.execute({ id, text });
+
+        return response.json(piu);
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
 
 piusRouter.get("/", (request, response) => {
     try {

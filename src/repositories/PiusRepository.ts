@@ -6,6 +6,10 @@ interface CreatePiuDTO {
     creation_date: Date;
     last_update_date: Date;
 }
+interface UpdatePiuDTO {
+    id: string;
+    text: string;
+}
 
 class PiusRepository {
     private pius: Piu[];
@@ -39,6 +43,19 @@ class PiusRepository {
 
     public getPius() {
         return this.pius;
+    }
+
+    private getIndexById(id: string): number {
+        const resp = this.pius.findIndex((piu) => piu.id == id);
+        return resp;
+    }
+
+    public update({ id, text }: UpdatePiuDTO): Piu {
+        const index = this.getIndexById(id);
+        const piu = this.pius[index];
+        piu.text = text;
+        piu.last_update_date = new Date();
+        return piu;
     }
 }
 
