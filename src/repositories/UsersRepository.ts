@@ -37,6 +37,11 @@ class UsersRepository {
 
         return user;
     }
+
+    public checkCPF(cpf: string): boolean {
+        const foundCPF = this.users.find((user) => user.CPF == cpf);
+        return !!foundCPF;
+    }
 }
 
 export default UsersRepository;

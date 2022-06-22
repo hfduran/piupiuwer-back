@@ -1,4 +1,5 @@
 import User from "../models/User";
+import { isValid } from "date-fns";
 import UsersRepository from "../repositories/UsersRepository";
 
 interface RequestDTO {
@@ -25,6 +26,21 @@ class CreateUserService {
         name,
         phone_number,
     }: RequestDTO): User {
+        if (
+            !(
+                !!CPF &&
+                isValid(birthday) &&
+                isValid(creation_date) &&
+                isValid(last_update_date) &&
+                !!name &&
+                !!phone_number
+            )
+        )
+            throw Error("Some user info might be missing");
+
+        if (this.usersRepository.checkCPF(CPF))
+            throw Error("CPF already registered");
+
         const user = this.usersRepository.create({
             birthday,
             CPF,
