@@ -59,6 +59,14 @@ class PiusRepository {
         piu.last_update_date = new Date();
         return piu;
     }
+
+    public delete(id: string) {
+        if (!this.getById(id)) throw Error("There is no piu with this id");
+
+        const index = this.getIndexById(id);
+        this.pius.splice(index, 1);
+        return;
+    }
 }
 
 export default PiusRepository;

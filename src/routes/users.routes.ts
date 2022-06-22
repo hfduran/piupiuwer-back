@@ -10,37 +10,6 @@ import { usersRepository } from ".";
 
 const usersRouter = Router();
 
-usersRouter.delete("/:id", (request, response) => {
-    try {
-        const { id } = request.params;
-
-        const deleteUser = new DeleteUserService(usersRepository);
-        deleteUser.execute(id);
-        return response.json({ message: "user deleted" });
-    } catch (err: any) {
-        return response.status(400).json({ error: err.message });
-    }
-});
-
-usersRouter.patch("/", (request, response) => {
-    try {
-        const { id, name, CPF, phone_number, birthday } = request.body;
-
-        const updateUser = new UpdateUserService(usersRepository);
-        const user = updateUser.execute({
-            birthday: parseISO(birthday),
-            CPF,
-            id,
-            name,
-            phone_number,
-        });
-
-        return response.json({ user });
-    } catch (err: any) {
-        return response.status(400).json({ error: err.message });
-    }
-});
-
 usersRouter.get("/:id", (request, response) => {
     try {
         const { id } = request.params;
@@ -79,6 +48,37 @@ usersRouter.post("/", (request, response) => {
         });
 
         return response.json(user);
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
+
+usersRouter.delete("/:id", (request, response) => {
+    try {
+        const { id } = request.params;
+
+        const deleteUser = new DeleteUserService(usersRepository);
+        deleteUser.execute(id);
+        return response.json({ message: "user deleted" });
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
+
+usersRouter.patch("/", (request, response) => {
+    try {
+        const { id, name, CPF, phone_number, birthday } = request.body;
+
+        const updateUser = new UpdateUserService(usersRepository);
+        const user = updateUser.execute({
+            birthday: parseISO(birthday),
+            CPF,
+            id,
+            name,
+            phone_number,
+        });
+
+        return response.json({ user });
     } catch (err: any) {
         return response.status(400).json({ error: err.message });
     }
