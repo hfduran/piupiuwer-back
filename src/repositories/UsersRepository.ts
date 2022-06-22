@@ -42,6 +42,16 @@ class UsersRepository {
         const foundCPF = this.users.find((user) => user.CPF == cpf);
         return !!foundCPF;
     }
+
+    public getById(id: string): User | undefined {
+        const resp = this.users.find((user) => user.id === id);
+        return resp;
+    }
+
+    public getUsers(): User[] {
+        return this.users;
+    }
+    
 }
 
 export default UsersRepository;
