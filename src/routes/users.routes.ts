@@ -5,9 +5,22 @@ import CreateUserService from "../services/CreateUserService";
 import GetUserService from "../services/GetUserService";
 import GetAllUsersService from "../services/GetAllUsersService";
 import UpdateUserService from "../services/UpdateUserService";
+import DeleteUserService from "../services/DeleteUserService";
 import { usersRepository } from ".";
 
 const usersRouter = Router();
+
+usersRouter.delete("/:id", (request, response) => {
+    try {
+        const { id } = request.params;
+
+        const deleteUser = new DeleteUserService(usersRepository);
+        deleteUser.execute(id);
+        return;
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
 
 usersRouter.patch("/", (request, response) => {
     try {
