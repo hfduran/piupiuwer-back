@@ -1,17 +1,12 @@
-import { response, Router } from "express";
+import { Router } from "express";
 import { parseISO } from "date-fns";
 
 import CreateUserService from "../services/CreateUserService";
 import GetUserService from "../services/GetUserService";
 import GetAllUsersService from "../services/GetAllUsersService";
-import UsersRepository from "../repositories/UsersRepository";
+import { usersRepository } from ".";
 
 const usersRouter = Router();
-const usersRepository = new UsersRepository();
-
-interface RequestDTO {
-    id: string;
-}
 
 usersRouter.get("/:id", (request, response) => {
     try {
