@@ -31,6 +31,15 @@ class PiusRepository {
 
         return piu;
     }
+
+    public getById(id: string): Piu | undefined {
+        const resp = this.pius.find((piu) => piu.id === id);
+        return resp;
+    }
+
+    public getPius() {
+        return this.pius;
+    }
 }
 
 export default PiusRepository;

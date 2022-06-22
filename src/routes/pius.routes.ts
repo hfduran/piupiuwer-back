@@ -1,11 +1,35 @@
 import { Router } from "express";
 import { parseISO } from "date-fns";
 
-import PiusRepository from "../repositories/PiusRepository";
 import PostPiuService from "../services/PostPiuService";
+import GetPiuService from "../services/GetPiuService";
+import GetAllPiusService from "../services/GetAllPiusService";
 import { piusRepository, usersRepository } from ".";
 
 const piusRouter = Router();
+
+piusRouter.get("/", (request, response) => {
+    try {
+        const getPius = new GetAllPiusService(piusRepository);
+        const pius = getPius.execute();
+
+        return response.json({ pius });
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
+
+piusRouter.get("/:id", (request, response) => {
+    try {
+        const { id } = request.params;
+
+        const getPiu = new GetPiuService(piusRepository);
+
+        return response.json({ piu: getPiu.execute(id) });
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
 
 piusRouter.post("/", (request, response) => {
     try {
