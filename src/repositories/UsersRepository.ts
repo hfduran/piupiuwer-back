@@ -5,8 +5,14 @@ interface CreateUserDTO {
     birthday: Date;
     CPF: string;
     phone_number: string;
-    creation_date: Date;
-    last_update_date: Date;
+}
+
+interface UpdateUserDTO {
+    id: string
+    name: string;
+    birthday: Date;
+    CPF: string;
+    phone_number: string;
 }
 
 class UsersRepository {
@@ -20,16 +26,12 @@ class UsersRepository {
         name,
         birthday,
         CPF,
-        creation_date,
-        last_update_date,
         phone_number,
     }: CreateUserDTO): User {
         const user = new User({
             name,
             birthday,
             CPF,
-            creation_date,
-            last_update_date,
             phone_number,
         });
 
@@ -48,10 +50,28 @@ class UsersRepository {
         return resp;
     }
 
+    private getIndexById(id: string): number {
+        const resp = this.users.findIndex((user) => user.id == id);
+        return resp;
+    }
+
     public getUsers(): User[] {
         return this.users;
     }
-    
+
+    public update({ id, CPF, birthday, name, phone_number }: UpdateUserDTO) {
+        const index = this.getIndexById(id);
+        this.users[index] = {
+            id,
+            CPF,
+            birthday,
+            name,
+            phone_number,
+            creation_date: this.users[index].creation_date,
+            last_update_date: new Date(),
+        };
+        return this.users[index];
+    }
 }
 
 export default UsersRepository;

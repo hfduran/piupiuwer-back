@@ -1,27 +1,24 @@
-import User from "../models/User";
-import { isValid } from "date-fns";
 import UsersRepository from "../repositories/UsersRepository";
+import { isValid } from "date-fns";
 
 interface RequestDTO {
+    id: string;
     name: string;
-    birthday: Date;
-    CPF: string;
     phone_number: string;
+    CPF: string;
+    birthday: Date;
 }
 
-class CreateUserService {
-    private usersRepository: UsersRepository;
+class UpdateUserService {
+    private usersRepository;
 
     constructor(usersRepository: UsersRepository) {
         this.usersRepository = usersRepository;
     }
 
-    public execute({
-        CPF,
-        birthday,
-        name,
-        phone_number,
-    }: RequestDTO): User {
+    public execute({ id, CPF, birthday, name, phone_number }: RequestDTO) {
+        if (!this.usersRepository.getById(id))
+            throw Error("There is no user with this id");
         if (
             !(
                 !!CPF &&
@@ -32,18 +29,15 @@ class CreateUserService {
         )
             throw Error("Some user info might be missing");
 
-        if (this.usersRepository.checkCPF(CPF))
-            throw Error("CPF already registered");
-
-        const user = this.usersRepository.create({
+        const user = this.usersRepository.update({
+            id,
             birthday,
             CPF,
             name,
             phone_number,
         });
-
         return user;
     }
 }
 
-export default CreateUserService;
+export default UpdateUserService;

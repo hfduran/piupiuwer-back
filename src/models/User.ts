@@ -6,8 +6,6 @@ interface UserDTO {
     birthday: Date;
     CPF: string;
     phone_number: string;
-    creation_date: Date;
-    last_update_date: Date;
 }
 
 class User {
@@ -25,21 +23,14 @@ class User {
 
     last_update_date: Date;
 
-    constructor({
-        name,
-        birthday,
-        CPF,
-        phone_number,
-        creation_date,
-        last_update_date,
-    }: Omit<UserDTO, "id">) {
+    constructor({ name, birthday, CPF, phone_number }: Omit<UserDTO, "id">) {
         this.id = uuid();
         this.name = name;
         this.birthday = birthday;
         this.CPF = CPF;
         this.phone_number = phone_number;
-        this.creation_date = creation_date;
-        this.last_update_date = last_update_date;
+        this.creation_date = new Date();
+        this.last_update_date = new Date();
     }
 }
 

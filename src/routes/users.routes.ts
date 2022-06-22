@@ -4,9 +4,29 @@ import { parseISO } from "date-fns";
 import CreateUserService from "../services/CreateUserService";
 import GetUserService from "../services/GetUserService";
 import GetAllUsersService from "../services/GetAllUsersService";
+import UpdateUserService from "../services/UpdateUserService";
 import { usersRepository } from ".";
 
 const usersRouter = Router();
+
+usersRouter.patch("/", (request, response) => {
+    try {
+        const { id, name, CPF, phone_number, birthday } = request.body;
+
+        const updateUser = new UpdateUserService(usersRepository);
+        const user = updateUser.execute({
+            birthday: parseISO(birthday),
+            CPF,
+            id,
+            name,
+            phone_number,
+        });
+
+        return response.json({ user });
+    } catch (err: any) {
+        return response.status(400).json({ error: err.message });
+    }
+});
 
 usersRouter.get("/:id", (request, response) => {
     try {
@@ -32,18 +52,9 @@ usersRouter.get("/", (request, response) => {
 
 usersRouter.post("/", (request, response) => {
     try {
-        const {
-            name,
-            birthday,
-            CPF,
-            phone_number,
-            creation_date,
-            last_update_date,
-        } = request.body;
+        const { name, birthday, CPF, phone_number } = request.body;
 
         const parsedBirthday = parseISO(birthday);
-        const parsedCreationDate = parseISO(creation_date);
-        const parsedLastUpdateDate = parseISO(last_update_date);
 
         const createUser = new CreateUserService(usersRepository);
 
@@ -52,8 +63,6 @@ usersRouter.post("/", (request, response) => {
             birthday: parsedBirthday,
             CPF,
             phone_number,
-            creation_date: parsedCreationDate,
-            last_update_date: parsedLastUpdateDate,
         });
 
         return response.json(user);
